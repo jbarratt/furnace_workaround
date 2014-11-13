@@ -52,7 +52,7 @@ def main():
             complete = True
             if message:
                 notify(message)
-            continue
+            break
         except:
             traceback.print_exc()
             sleep(30)
