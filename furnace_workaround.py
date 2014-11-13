@@ -26,7 +26,8 @@ def store_temp(value):
     if 'temp_cache_file' not in cfg:
         return None
 
-    os.unlink(cfg['temp_cache_file'])
+    if os.path.exists(cfg['temp_cache_file']):
+        os.unlink(cfg['temp_cache_file'])
     open(cfg['temp_cache_file'], 'w').write(str(value))
 
 
