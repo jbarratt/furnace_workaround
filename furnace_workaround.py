@@ -42,7 +42,7 @@ def manage_temperature():
         return None
 
     # If the heat is actually rising, don't mess with it!
-    if last_temp and device.temperature > last_temp:
+    if last_temp and device.temperature >= last_temp:
         return None
 
     # Don't change the temperature unless it's significantly off
