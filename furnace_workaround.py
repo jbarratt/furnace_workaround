@@ -12,11 +12,36 @@ with open(os.path.expanduser('~/.nestconfig'), 'r') as f:
     cfg = yaml.load(f.read())
 
 
+def load_temp():
+    if 'temp_cache_file' not in cfg:
+        return None
+
+    if not os.path.exists(cfg['temp_cache_file']):
+        return None
+
+    return float(open(cfg['temp_cache_file'], 'r').read())
+
+
+def store_temp(value):
+    if 'temp_cache_file' not in cfg:
+        return None
+
+    os.unlink(cfg['temp_cache_file'])
+    open(cfg['temp_cache_file'], 'w').write(str(value))
+
+
 def manage_temperature():
     n = nest.Nest(cfg['user'], cfg['password'])
     device = n.structures[0].devices[0]
 
+    last_temp = load_temp()
+    store_temp(device.temperature)
+
     if device.temperature > cfg['target_temp']:
+        return None
+
+    # If the heat is actually rising, don't mess with it!
+    if last_temp and device.temperature > last_temp:
         return None
 
     # Don't change the temperature unless it's significantly off
