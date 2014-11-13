@@ -8,8 +8,6 @@ from time import sleep
 from pushover import init, Client
 import traceback
 
-# in celcius. 65.5 F
-TARGET_TEMP = 19
 with open(os.path.expanduser('~/.nestconfig'), 'r') as f:
     cfg = yaml.load(f.read())
 
@@ -18,11 +16,12 @@ def manage_temperature():
     n = nest.Nest(cfg['user'], cfg['password'])
     device = n.structures[0].devices[0]
 
-    if device.temperature > TARGET_TEMP:
+    if device.temperature > cfg['target_temp']:
         return None
 
-    if device.target < TARGET_TEMP:
-        device.target = TARGET_TEMP
+    # Don't change the temperature unless it's significantly off
+    if device.target < (cfg['target_temp']-1):
+        device.target = cfg['target_temp']
         return None
 
     # Check to see if the device temp is critically low
@@ -30,10 +29,13 @@ def manage_temperature():
     if device.temperature < (device.target - 2):
         # force the furnace to think the heater is off by setting the temp
         # 2 degrees lower than it currently is
-        print "Attempting to relight thermostat"
+        print ("Attempting to relight thermostat.\n"
+               "Device temperature was {0}\n"
+               "Device target was {1}\n").format(c_to_f(device.temperature),
+                                                 c_to_f(device.target))
         device.temperature = (device.temperature - 2)
         sleep(60)
-        device.temperature = TARGET_TEMP
+        device.temperature = cfg['target_temp']
         return ("Temp is {0}, attempted to relight "
                 "thermostat.").format(c_to_f(device.temperature))
 
