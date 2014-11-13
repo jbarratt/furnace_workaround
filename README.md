@@ -30,7 +30,13 @@ minute, and attempt to turn it back on.
 
 # Installing
 
-It's not too elegant. Just run the script.
+The requirements are listed in requirements.txt.
+The official pip version of nest_thermostat is not ideal, so I used a fork
+(actually a fork of a fork)
+
+[https://github.com/jkoelker/nest_thermostat](https://github.com/jkoelker/nest_thermostat)
+
+Beyond that, Just run the script.
 You need a config file (currently hardcoded to `~/.nestconfig`) which is
 in YAML. `target_temp` should be in celsius, which is the nest's native
 mode. (It makes it saner to detect if it's set where we expected.)
