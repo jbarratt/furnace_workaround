@@ -1,2 +1,3 @@
 git+https://github.com/jkoelker/nest_thermostat.git
 python-pushover
+PyYAML

@@ -18,8 +18,7 @@ This tool will run periodically, and if the nest is more than 3 degrees below
 the target temp, it will assume it's in an error state; shut it down, wait one
 minute, and attempt to turn it back on.
 
-* take a target temp
-* if it's away, turn that off
+* load a locally stored target temp
 * if the target temp == the current nest target temp
     * if the current temp more than 3 degrees less
         * set target temp to 2 degrees less than that
